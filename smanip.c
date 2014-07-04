@@ -12,22 +12,32 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "smanip.h"
 
-char *strtolower(char *str, int strleng)
+char *strtolower(const char *str)
 {
-	int i;
-	char lowerstr[strleng];
-	for(i = 0; i < strleng; i++)
+	int i = 0;
+	char lowerstr[strlen(str)+1];
+	while(str[i] != '\0')
+	{
 		lowerstr[i] = tolower(str[i]);
+		i++;
+	}
+	lowerstr[i] = '\0';
+
 	return strdup(lowerstr);
 }
 
-char *strtoupper(char *str, int strleng)
+char *strtoupper(const char *str)
 {
-	int i;
-	char upperstr[strleng];
-	for(i = 0; i < strleng; i++)
-		upperstr[i] = toupper(str[i]);
-	return strdup(upperstr);
+	int i = 0;
+	char lowerstr[strlen(str)+1];
+	while(str[i] != '\0')
+	{
+		lowerstr[i] = toupper(str[i]);
+		i++;
+	}
+	lowerstr[i] = '\0';
+	
+	return strdup(lowerstr);
 }
 
 int strpos(char *haystack, char *needle)
@@ -38,13 +48,14 @@ int strpos(char *haystack, char *needle)
 	return NOT_PRES;
 }
 
-char *substr(char *str, int start, int len, int strleng)
+char *substr(const char *str, int start, int offset)
 {
-	char str2[strleng];
-	if(start+len > strleng)
+	if(strlen(str) < start + offset)
 		exit(1);
-	strncpy(str2, str+start, len);
-	str2[start+len] = '\0';
+
+	char str2[offset];
+	strncpy(str2, str+start, offset);
+	str2[offset] = '\0';
 
 	return strdup(str2);
 }
@@ -89,3 +100,44 @@ char *str_replace ( const char *string, const char *substr, const char *replacem
 	}
 	return newstr;
 }
+
+/*
+	The following functions are based off of the LIB_parse.php library written by Michael Schrenk in his book Webbots, Spiders, and Screenscrapers (nostarch press).
+	I have attempted to recreate them in C as well as I could. The original algorithms and all credit for authorship belong to Michael Schrenk.
+*/
+
+char *split_string(const char *string, const char *delineator, int desired, int type)
+{
+	char *lc_str = strtolower(string);
+	char *marker = strtolower(delineator);
+	char *parsed_string;
+
+	int split_here;
+	if(desired == BEFORE)
+	{
+		if(type == EXCL)
+			split_here = strpos(lc_str, marker);
+		else
+			split_here = strpos(lc_str, marker)+strlen(marker);
+
+		parsed_string = substr(string, 0, split_here);
+	}
+	else
+	{
+		if(type == EXCL)
+			split_here = strpos(lc_str, marker) + strlen(marker);
+		else
+			split_here = strpos(lc_str, marker);
+
+		parsed_string = substr(string, split_here, strlen(string)-split_here);
+	}
+
+	return strdup(parsed_string);
+}
+
+char *return_between(const char *string, const char *start, const char *stop, int type)
+{
+	char *temp = split_string(string, start, AFTER, type);
+	return strdup(split_string(temp, stop, BEFORE, type));
+}
+
