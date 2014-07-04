@@ -18,11 +18,17 @@
 #include <stdlib.h>
 
 #define NOT_PRES -1
+#define EXCL 1
+#define INCL 0
+#define BEFORE 1
+#define AFTER 0
 
- char *strtolower(char *str, int strleng);
- char *strtoupper(char *str, int strleng);
+ char *strtolower(const char *str);
+ char *strtoupper(const char *str);
  int strpos(char *haystack, char *needle);
- char *substr(char *str, int start, int len, int strleng);
+ char *substr(const char *str, int start, int len);
  char *str_replace (const char *, const char *, const char *);
+ char *split_string(const char *, const char *, int, int);
+ char *return_between(const char *, const char *, const char *, int);
 
 #endif
