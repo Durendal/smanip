@@ -12,11 +12,11 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "smanip.h"
 
-char *strtolower(const char *str)
+char *strtolower(const char *str, int len)
 {
 	int i = 0;
 	char lowerstr[strlen(str)+1];
-	while(str[i] != '\0')
+	while(str[i] != '\0' && i < len)
 	{
 		lowerstr[i] = tolower(str[i]);
 		i++;
@@ -26,11 +26,11 @@ char *strtolower(const char *str)
 	return strdup(lowerstr);
 }
 
-char *strtoupper(const char *str)
+char *strtoupper(const char *str, int len)
 {
 	int i = 0;
 	char lowerstr[strlen(str)+1];
-	while(str[i] != '\0')
+	while(str[i] != '\0' && i < len)
 	{
 		lowerstr[i] = toupper(str[i]);
 		i++;

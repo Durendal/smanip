@@ -23,8 +23,8 @@
 #define BEFORE 1
 #define AFTER 0
 
- char *strtolower(const char *str);
- char *strtoupper(const char *str);
+ char *strtolower(const char *str, int);
+ char *strtoupper(const char *str, int);
  int strpos(char *haystack, char *needle);
  char *substr(const char *str, int start, int len);
  char *str_replace (const char *, const char *, const char *);
